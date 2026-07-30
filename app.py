@@ -3,7 +3,7 @@ import pandas as pd
 import sqlite3
 import re
 import pdfplumber
-import spacy
+# import spacy
 import plotly.express as px
 
 # 1. Page Setup
@@ -52,17 +52,12 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Load NLP Model
-import os
-
+# Load NLP Model (Disabled spacy to avoid build errors)
 @st.cache_resource
 def load_nlp():
-    try:
-        return spacy.load("en_core_web_sm")
-    except OSError:
-        os.system("python -m spacy download en_core_web_sm")
-        return spacy.load("en_core_web_sm")
-nlp = load_nlp()
+    return None
 
+nlp = None
 # 2. Database Functions
 def init_db():
     conn = sqlite3.connect("candidate_database.db")
