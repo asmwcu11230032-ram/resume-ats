@@ -52,10 +52,15 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Load NLP Model
+import os
+
 @st.cache_resource
 def load_nlp():
-    return spacy.load("en_core_web_sm")
-
+    try:
+        return spacy.load("en_core_web_sm")
+    except OSError:
+        os.system("python -m spacy download en_core_web_sm")
+        return spacy.load("en_core_web_sm")
 nlp = load_nlp()
 
 # 2. Database Functions
