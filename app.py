@@ -111,16 +111,24 @@ def extract_contact_info(text):
     return email.group(0) if email else "N/A", phone.group(0) if phone else "N/A"
 
 def extract_name(text, filename):
-    if nlp is not None:
-        try:
-            doc = nlp(text[:300])
-            for ent in doc.ents:
-                if ent.label_ == "PERSON":
-                    return ent.text
-        except Exception:
-            pass
-    clean_name = filename.replace('.pdf', '').replace('_', ' ').replace('-', ' ')
-    return clean_name.title()
+    lines = [line.strip() for line in text.split('\n') if line.strip()]
+    
+    # Check first 3 lines for candidate name
+    for line in lines[:3]:
+        # Skip titles and generic header keywords
+        if any(keyword in line.lower() for keyword in ["resume", "curriculum", "cv", "page", "profile"]):
+            continue
+        # Skip contact information lines
+        if "@" in line or any(char.isdigit() for char in line):
+            continue
+        # Extract name if line contains valid alphabetic text
+        clean_line = re.sub(r'[^a-zA-Z\s]', '', line).strip()
+        if 2 <= len(clean_line.split()) <= 4:
+            return clean_line.title()
+            
+    # Fallback to cleaned filename if name is not found
+    clean_filename = filename.replace('.pdf', '').replace('_', ' ').replace('-', ' ')
+    return clean_filename.title()
 
 def process_nlp_matching(resume_text, jd_text):
     jd_words = [w.strip().lower() for w in re.split(r'[,;\n\s]+', jd_text) if len(w.strip()) > 1]
