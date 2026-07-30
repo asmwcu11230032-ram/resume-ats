@@ -111,10 +111,14 @@ def extract_contact_info(text):
     return email.group(0) if email else "N/A", phone.group(0) if phone else "N/A"
 
 def extract_name(text, filename):
-    doc = nlp(text[:300])
-    for ent in doc.ents:
-        if ent.label_ == "PERSON":
-            return ent.text
+    if nlp is not None:
+        try:
+            doc = nlp(text[:300])
+            for ent in doc.ents:
+                if ent.label_ == "PERSON":
+                    return ent.text
+        except Exception:
+            pass
     clean_name = filename.replace('.pdf', '').replace('_', ' ').replace('-', ' ')
     return clean_name.title()
 
