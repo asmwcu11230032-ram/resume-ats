@@ -1,4 +1,4 @@
-import os; os.system("python -m spacy download en_core_web_sm")
+import os
 import streamlit as st
 import pdfplumber
 import sqlite3
@@ -10,7 +10,12 @@ import plotly.express as px
 # Load Spacy Model
 @st.cache_resource
 def load_spacy():
-    return spacy.load("en_core_web_sm")
+    try:
+        return spacy.load("en_core_web_sm")
+    except:
+        import os
+        os.system("python -m spacy download en_core_web_sm")
+        return spacy.load("en_core_web_sm")
 
 nlp = load_spacy()
 
