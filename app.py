@@ -78,9 +78,9 @@ def extract_details(text):
     email_match = re.search(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', text)
     email = email_match.group(0) if email_match else "N/A"
 
-    # Extract Phone
-    phone_match = re.search(r'(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{4}', text)
-    phone = phone_match.group(0) if phone_match else "N/A"
+  # Extract Phone
+    phone_match = re.search(r'(\+?\d{1,3}[-.\s]*)?(\(?\d{3}\)?[-.\s]*)?\d{3}[-.\s]*\d{4}', text)
+    phone = phone_match.group(0).strip() if phone_match else "N/A"
 
     # Extract Name (First line logic without Spacy)
     lines = [line.strip() for line in text.strip().split('\n') if line.strip()]
