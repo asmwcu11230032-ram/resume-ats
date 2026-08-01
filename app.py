@@ -72,27 +72,21 @@ def clean_and_tokenize(text):
     return keywords
 # Extract Name, Email, Phone from Resume Text
 def extract_details(text):
-    doc = nlp(text)
-    
     # Extract Email
     email_match = re.search(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', text)
     email = email_match.group(0) if email_match else "N/A"
-    
+
     # Extract Phone
-    phone_match = re.search(r'\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}', text)
+    phone_match = re.search(r'(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{4}', text)
     phone = phone_match.group(0) if phone_match else "N/A"
-    
-    # Extract Name using Spacy PERSON Entity
+
+    # Extract Name (First line logic without Spacy)
+    lines = [line.strip() for line in text.strip().split('\n') if line.strip()]
     name = "Candidate"
-    for ent in doc.ents:
-        if ent.label_ == "PERSON" and len(ent.text.split()) <= 3:
-            name = ent.text.strip()
-            break
-            
-    if name == "Candidate":
-        first_line = text.strip().split('\n')[0]
+    if lines:
+        first_line = lines[0]
         if len(first_line.split()) <= 4 and not any(char.isdigit() for char in first_line):
-            name = first_line.strip()
+            name = first_line
 
     return name, email, phone
 
