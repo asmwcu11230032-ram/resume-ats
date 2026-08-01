@@ -1,4 +1,3 @@
-import os
 import streamlit as st
 import pdfplumber
 import sqlite3
@@ -12,7 +11,7 @@ import plotly.express as px
 def load_spacy():
     try:
         return spacy.load("en_core_web_sm")
-    except OSError:
+    except Exception:
         import spacy.cli
         spacy.cli.download("en_core_web_sm")
         return spacy.load("en_core_web_sm")
