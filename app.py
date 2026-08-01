@@ -111,29 +111,24 @@ if reset_btn:
     st.sidebar.success("Database Reset Done!")
 
 if analyze_btn and jd_text and uploaded_files:
-    jd_keywords = clean_and_tokenize(jd_text)
-    
     for file in uploaded_files:
         with pdfplumber.open(file) as pdf:
             resume_text = " ".join([page.extract_text() or "" for page in pdf.pages])
-            
-        resume_keywords = clean_and_tokenize(resume_text)
-        name, email, phone = extract_details(resume_text)
-        
-        # Skill Matching Logic
-        matched = jd_keywords.intersection(resume_keywords)
-        missing = jd_keywords - resume_keywords
 
-        # Match Score Calculation
-        match_score = round((len(matched) / len(jd_keywords)) * 100, 2) if jd_keywords else 0.0
+        # New Skill Matching and Score Calculation
+        match_score, matched, missing = calculate_matches(resume_text, jd_text)
+        name, email, phone = extract_details(resume_text)
+
+        # Convert matched/missing lists to string
+        matched_str = ", ".join(matched) if matched else "None"
+        missing_str = ", ".join(missing) if missing else "None"
 
         # Save to Database
         c.execute('''
             INSERT INTO candidates (name, email, phone, match_score, matched_skills, missing_skills)
             VALUES (?, ?, ?, ?, ?, ?)
-        ''', (name, email, phone, match_score, ", ".join(matched), ", ".join(missing)))
+        ''', (name, email, phone, match_score, matched_str, missing_str))
         conn.commit()
-
     st.success(f"Processed {len(uploaded_files)} resumes and saved to Database!")
 
 # Main Dashboard View
