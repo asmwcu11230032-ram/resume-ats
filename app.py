@@ -9,8 +9,8 @@ import plotly.express as px
 # Load Spacy Model
 @st.cache_resource
 def load_spacy():
-        return spacy.load("en_core_web_sm")
- 
+    return spacy.load("en_core_web_sm")
+
 nlp = load_spacy()
 
 # Database Setup
@@ -21,15 +21,15 @@ c = conn.cursor()
 c.execute('DROP TABLE IF EXISTS candidates')
 
 c.execute('''
-    CREATE TABLE IF NOT EXISTS candidates (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        email TEXT,
-        phone TEXT,
-        match_score REAL,
-        matched_skills TEXT,
-        missing_skills TEXT
-    )
+CREATE TABLE IF NOT EXISTS candidates (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    email TEXT,
+    phone TEXT,
+    match_score REAL,
+    matched_skills TEXT,
+    missing_skills TEXT
+)
 ''')
 conn.commit()
 
