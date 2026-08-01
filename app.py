@@ -13,10 +13,9 @@ def load_spacy():
     try:
         return spacy.load("en_core_web_sm")
     except:
-        import os
-        os.system("python -m spacy download en_core_web_sm")
+        from spacy.cli import download
+        download("en_core_web_sm")
         return spacy.load("en_core_web_sm")
-
 nlp = load_spacy()
 
 # Database Setup
