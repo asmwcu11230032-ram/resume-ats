@@ -4,18 +4,34 @@ import sqlite3
 import pandas as pd
 import re
 import plotly.express as px
-
 import spacy
 
-# Load Spacy Model
-@st.cache_resource
-def load_spacy():
-    import en_core_web_sm
-    return en_core_web_sm.load()
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 
-nlp = load_spacy()
+# Download required NLTK datasets for NLP
+nltk.download('punkt')
+nltk.download('stopwords')
 
+# NLP Function to process text
+def process_text_nlp(text):
+    tokens = word_tokenize(text.lower())
+    stop_words = set(stopwords.words('english'))
+    filtered_words = [word for word in tokens if word.isalnum() and word not in stop_words]
+    return filtered_words
 
+# Function to calculate similarity score
+def calculate_score(resume_text, job_desc):
+    resume_tokens = set(process_text_nlp(resume_text))
+    job_tokens = set(process_text_nlp(job_desc))
+    
+    if not job_tokens:
+        return 0.0
+        
+    common_words = resume_tokens.intersection(job_tokens)
+    score = (len(common_words) / len(job_tokens)) * 100
+    return round(score, 2)
 # Database Setup
 conn = sqlite3.connect('candidate_database.db', check_same_thread=False)
 c = conn.cursor()
