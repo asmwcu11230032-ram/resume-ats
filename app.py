@@ -53,23 +53,25 @@ CREATE TABLE IF NOT EXISTS candidates (
 conn.commit()
 
 # Fixed Phrase Splitter (Only splits on separators, never cuts inside words)
-def clean_and_tokenize(text):
-    text = text.lower()
-
-    # Split strictly by comma, dash, bullet, or newline
-    raw_skills = re.split(r'[\n\r\t,;•\-]', text)
-
-    keywords = set()
-    for skill in raw_skills:
-        # Clean special characters but preserve full skill phrases
-        clean_skill = re.sub(r'[^a-z0-9\s]', ' ', skill)
-        clean_skill = " ".join(clean_skill.split())
-
-        # Keep phrases/words longer than 2 characters
-        if len(clean_skill) > 2:
-            keywords.add(clean_skill)
-
-    return keywords
+def calculate_matches(resume_text, jd_text):
+    raw_skills = re.split(r'[,;\n]', jd_text)
+    jd_skills = [skill.strip().lower() for skill in raw_skills if skill.strip()]
+    
+    resume_text_clean = resume_text.lower()
+    matched_skills = []
+    missing_skills = []
+    
+    for skill in jd_skills:
+        pattern = r'\b' + re.escape(skill) + r'\b'
+        if re.search(pattern, resume_text_clean):
+            matched_skills.append(skill)
+        else:
+            missing_skills.append(skill)
+            
+    total_skills = len(jd_skills)
+    score = (len(matched_skills) / total_skills * 100) if total_skills > 0 else 0.0
+    
+    return round(score, 2), matched_skills, missing_skills
 # Extract Name, Email, Phone from Resume Text
 def extract_details(text):
     # Extract Email
