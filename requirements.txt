@@ -2,5 +2,4 @@ streamlit
 pandas
 pdfplumber
 plotly
-spacy==3.7.5
-https://github.com
+
