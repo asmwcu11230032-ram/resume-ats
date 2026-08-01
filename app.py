@@ -16,9 +16,6 @@ def load_spacy():
 nlp = load_spacy()
 
 
-
-nlp = load_spacy()
-
 # Database Setup
 conn = sqlite3.connect('candidate_database.db', check_same_thread=False)
 c = conn.cursor()
