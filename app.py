@@ -78,8 +78,7 @@ def extract_details(text):
     return name, email, phone
 
 # Page UI Config
-st.set_page_config(page_title="Resume ATS", layout="wide")
-st.title("🤖 Resume ATS & Candidate Matcher")
+st.title("📄 Resume ATS & Candidate Matcher")
 
 # Sidebar
 st.sidebar.header("⚙️ Control Panel")
