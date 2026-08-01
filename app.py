@@ -12,9 +12,9 @@ import plotly.express as px
 def load_spacy():
     try:
         return spacy.load("en_core_web_sm")
-    except:
-        from spacy.cli import download
-        download("en_core_web_sm")
+    except OSError:
+        import spacy.cli
+        spacy.cli.download("en_core_web_sm")
         return spacy.load("en_core_web_sm")
 nlp = load_spacy()
 
