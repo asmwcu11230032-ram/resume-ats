@@ -9,12 +9,8 @@ import plotly.express as px
 # Load Spacy Model
 @st.cache_resource
 def load_spacy():
-    try:
         return spacy.load("en_core_web_sm")
-    except Exception:
-        import spacy.cli
-        spacy.cli.download("en_core_web_sm")
-        return spacy.load("en_core_web_sm")
+ 
 nlp = load_spacy()
 
 # Database Setup
