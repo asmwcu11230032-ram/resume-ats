@@ -6,11 +6,14 @@ import re
 import spacy
 import plotly.express as px
 
+
 # Load Spacy Model
 @st.cache_resource
 def load_spacy():
     import en_core_web_sm
     return en_core_web_sm.load()
+
+nlp = load_spacy()
 
 nlp = load_spacy()
 
