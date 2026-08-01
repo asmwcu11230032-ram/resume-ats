@@ -3,9 +3,9 @@ import pdfplumber
 import sqlite3
 import pandas as pd
 import re
-import spacy
 import plotly.express as px
 
+import spacy
 
 # Load Spacy Model
 @st.cache_resource
@@ -14,6 +14,8 @@ def load_spacy():
     return en_core_web_sm.load()
 
 nlp = load_spacy()
+
+
 
 nlp = load_spacy()
 
